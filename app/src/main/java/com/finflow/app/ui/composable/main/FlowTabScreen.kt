@@ -12,7 +12,7 @@ import com.finflow.app.domain.model.flow.expense.Expense
 import com.finflow.app.domain.model.flow.expense.ExpenseCategory
 
 @Composable
-fun FlowMainScreen(
+fun FlowTabScreen(
     modifier: Modifier = Modifier
 ) {
     Column(

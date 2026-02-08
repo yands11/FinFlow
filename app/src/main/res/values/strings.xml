@@ -3,4 +3,7 @@
     <string name="general_expense_title">지출</string>
     <string name="saving_expense_title">저축</string>
     <string name="investment_expense_title">투자</string>
+    <string name="tab_flow">Flow</string>
+    <string name="tab_dashboard">Dashboard</string>
+    <string name="tab_setting">Setting</string>
 </resources>
