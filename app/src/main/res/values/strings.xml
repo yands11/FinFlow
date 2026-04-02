@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">FinFlow</string>
+    <string name="income_title">수입</string>
     <string name="general_expense_title">지출</string>
     <string name="saving_expense_title">저축</string>
     <string name="investment_expense_title">투자</string>
-    <string name="tab_flow">Flow</string>
-    <string name="tab_dashboard">Dashboard</string>
-    <string name="tab_setting">Setting</string>
+    <string name="account_summary_title">계좌별 합산</string>
+    <string name="tab_flow">CashFlow</string>
+    <string name="tab_dashboard">통계</string>
+    <string name="tab_setting">더보기</string>
 </resources>

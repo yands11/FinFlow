@@ -12,7 +12,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.finflow.app.ui.composable.main.FlowTabScreen
+import com.finflow.app.ui.composable.main.flow.FlowTabScreen
 import com.finflow.app.ui.composable.main.MainNavigationBar
 import com.finflow.app.ui.composable.main.dashboard.DashboardTabScreen
 import com.finflow.app.ui.composable.main.setting.SettingTabScreen

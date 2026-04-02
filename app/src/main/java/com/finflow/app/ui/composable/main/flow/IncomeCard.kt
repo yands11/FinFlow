@@ -1,4 +1,4 @@
-package com.finflow.app.ui.composable.main
+package com.finflow.app.ui.composable.main.flow
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
