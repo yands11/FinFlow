@@ -13,12 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.finflow.app.domain.model.flow.expense.ExpenseCategory
 import java.text.DecimalFormat
 
 @Composable
 fun ExpenseItem(
-    category: ExpenseCategory,
     name: String,
     amount: Long,
     bankAccountName: String,
@@ -33,7 +31,6 @@ fun ExpenseItem(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            ExpenseCategoryTag(category = category)
             Text(
                 text = name,
                 fontSize = 16.sp,

@@ -94,24 +94,11 @@ fun FlowTabScreen(
                             sectionTitle = stringResource(R.string.general_expense_title),
                             totalAmount = generalExpenseList.sumOf { it.amount },
                             content = {
-                                generalExpenseList.forEach { expense ->
-                                    ExpenseItem(
-                                        category = expense.category,
-                                        name = expense.name,
-                                        amount = expense.amount,
-                                        bankAccountName = expense.bankAccount.name,
-                                        onClick = {
-                                            editingExpense = EditingExpense(
-                                                id = expense.id,
-                                                type = AddItemType.GENERAL,
-                                                name = expense.name,
-                                                amount = expense.amount,
-                                                categoryId = expense.category.id,
-                                                bankAccountId = expense.bankAccount.id,
-                                            )
-                                        }
-                                    )
-                                }
+                                GroupedExpenseContent(
+                                    expenses = generalExpenseList,
+                                    itemType = AddItemType.GENERAL,
+                                    onExpenseClick = { editingExpense = it }
+                                )
                             }
                         )
                     }
@@ -123,24 +110,11 @@ fun FlowTabScreen(
                             sectionTitle = stringResource(R.string.saving_expense_title),
                             totalAmount = savingExpenseList.sumOf { it.amount },
                             content = {
-                                savingExpenseList.forEach { expense ->
-                                    ExpenseItem(
-                                        category = expense.category,
-                                        name = expense.name,
-                                        amount = expense.amount,
-                                        bankAccountName = expense.bankAccount.name,
-                                        onClick = {
-                                            editingExpense = EditingExpense(
-                                                id = expense.id,
-                                                type = AddItemType.SAVING,
-                                                name = expense.name,
-                                                amount = expense.amount,
-                                                categoryId = expense.category.id,
-                                                bankAccountId = expense.bankAccount.id,
-                                            )
-                                        }
-                                    )
-                                }
+                                GroupedExpenseContent(
+                                    expenses = savingExpenseList,
+                                    itemType = AddItemType.SAVING,
+                                    onExpenseClick = { editingExpense = it }
+                                )
                             }
                         )
                     }
@@ -152,24 +126,11 @@ fun FlowTabScreen(
                             sectionTitle = stringResource(R.string.investment_expense_title),
                             totalAmount = investmentExpenseList.sumOf { it.amount },
                             content = {
-                                investmentExpenseList.forEach { expense ->
-                                    ExpenseItem(
-                                        category = expense.category,
-                                        name = expense.name,
-                                        amount = expense.amount,
-                                        bankAccountName = expense.bankAccount.name,
-                                        onClick = {
-                                            editingExpense = EditingExpense(
-                                                id = expense.id,
-                                                type = AddItemType.INVESTMENT,
-                                                name = expense.name,
-                                                amount = expense.amount,
-                                                categoryId = expense.category.id,
-                                                bankAccountId = expense.bankAccount.id,
-                                            )
-                                        }
-                                    )
-                                }
+                                GroupedExpenseContent(
+                                    expenses = investmentExpenseList,
+                                    itemType = AddItemType.INVESTMENT,
+                                    onExpenseClick = { editingExpense = it }
+                                )
                             }
                         )
                     }
@@ -301,6 +262,42 @@ fun FlowTabScreen(
                 editingExpense = null
             }
         )
+    }
+}
+
+@Composable
+private fun GroupedExpenseContent(
+    expenses: List<Expense>,
+    itemType: AddItemType,
+    onExpenseClick: (EditingExpense) -> Unit,
+) {
+    val grouped = expenses.groupBy { it.category }
+    grouped.forEach { (category, items) ->
+        // 카테고리 헤더
+        ExpenseCategoryTag(
+            category = category,
+            modifier = Modifier.padding(start = 16.dp, top = 8.dp)
+        )
+        // 해당 카테고리의 아이템들
+        items.forEach { expense ->
+            ExpenseItem(
+                name = expense.name,
+                amount = expense.amount,
+                bankAccountName = expense.bankAccount.name,
+                onClick = {
+                    onExpenseClick(
+                        EditingExpense(
+                            id = expense.id,
+                            type = itemType,
+                            name = expense.name,
+                            amount = expense.amount,
+                            categoryId = expense.category.id,
+                            bankAccountId = expense.bankAccount.id,
+                        )
+                    )
+                }
+            )
+        }
     }
 }
 
