@@ -1,76 +1,52 @@
 package com.finflow.app.ui.composable.main.dashboard
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.finflow.app.ui.model.MonthStatUiModel
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.finflow.app.ui.viewmodel.DashboardViewModel
 
 @Composable
 fun DashboardTabScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: DashboardViewModel = hiltViewModel(),
 ) {
-    val monthStats = sampleMonthStats()
+    val monthStats by viewModel.monthlyStats.collectAsState()
 
-    LazyColumn(
-        modifier = modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
-    ) {
-        item {
-            IncomeLineChart(monthStats = monthStats)
+    if (monthStats.isEmpty()) {
+        Box(
+            modifier = modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "데이터가 없습니다.\nCashFlow 탭에서 수입/지출을 추가해주세요.",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
+    } else {
+        LazyColumn(
+            modifier = modifier.fillMaxSize(),
+            contentPadding = PaddingValues(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            item {
+                IncomeLineChart(monthStats = monthStats)
+            }
 
-        item {
-            ExpenseRatioBarChart(monthStats = monthStats)
+            item {
+                ExpenseRatioBarChart(monthStats = monthStats)
+            }
         }
     }
 }
-
-private fun sampleMonthStats(): List<MonthStatUiModel> = listOf(
-    MonthStatUiModel(
-        monthLabel = "11월",
-        incomeTotal = 5_440_000,
-        expenseTotal = 1_200_000,
-        savingTotal = 300_000,
-        investmentTotal = 400_000
-    ),
-    MonthStatUiModel(
-        monthLabel = "12월",
-        incomeTotal = 5_440_000,
-        expenseTotal = 1_500_000,
-        savingTotal = 300_000,
-        investmentTotal = 500_000
-    ),
-    MonthStatUiModel(
-        monthLabel = "1월",
-        incomeTotal = 5_440_000,
-        expenseTotal = 900_000,
-        savingTotal = 300_000,
-        investmentTotal = 500_000
-    ),
-    MonthStatUiModel(
-        monthLabel = "2월",
-        incomeTotal = 5_440_000,
-        expenseTotal = 1_100_000,
-        savingTotal = 300_000,
-        investmentTotal = 500_000
-    ),
-    MonthStatUiModel(
-        monthLabel = "3월",
-        incomeTotal = 6_940_000,
-        expenseTotal = 770_000,
-        savingTotal = 300_000,
-        investmentTotal = 500_000
-    ),
-    MonthStatUiModel(
-        monthLabel = "4월",
-        incomeTotal = 6_940_000,
-        expenseTotal = 770_000,
-        savingTotal = 300_000,
-        investmentTotal = 500_000
-    ),
-)

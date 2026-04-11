@@ -12,13 +12,15 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import com.finflow.app.ui.composable.main.flow.FlowTabScreen
 import com.finflow.app.ui.composable.main.MainNavigationBar
 import com.finflow.app.ui.composable.main.dashboard.DashboardTabScreen
+import com.finflow.app.ui.composable.main.flow.FlowTabScreen
 import com.finflow.app.ui.composable.main.setting.SettingTabScreen
 import com.finflow.app.ui.model.MainNavTab
 import com.finflow.app.ui.theme.FinFlowTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
