@@ -8,4 +8,6 @@
     <string name="tab_flow">CashFlow</string>
     <string name="tab_dashboard">통계</string>
     <string name="tab_setting">더보기</string>
+    <string name="dashboard_income_chart_title">월별 수입 추이</string>
+    <string name="dashboard_expense_ratio_chart_title">월별 지출 비율</string>
 </resources>
