@@ -10,4 +10,10 @@
     <string name="tab_setting">더보기</string>
     <string name="dashboard_income_chart_title">월별 수입 추이</string>
     <string name="dashboard_expense_ratio_chart_title">월별 지출 비율</string>
+    <string name="setting_account_management">계좌 관리</string>
+    <string name="setting_account_management_desc">계좌 추가, 수정, 삭제</string>
+    <string name="setting_category_management">카테고리 관리</string>
+    <string name="setting_category_management_desc">지출 카테고리 설정</string>
+    <string name="setting_app_info">앱 정보</string>
+    <string name="setting_app_version">버전 %1$s</string>
 </resources>
