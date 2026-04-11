@@ -24,7 +24,8 @@ import java.text.DecimalFormat
 @Composable
 fun IncomeSectionCard(
     incomeList: List<CashIncome>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onIncomeClick: (CashIncome) -> Unit = {},
 ) {
     val total = incomeList.sumOf { it.amount }
 
@@ -65,7 +66,7 @@ fun IncomeSectionCard(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { /* TODO: Handle click */ }
+                        .clickable { onIncomeClick(income) }
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {

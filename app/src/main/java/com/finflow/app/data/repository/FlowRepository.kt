@@ -40,6 +40,10 @@ interface FlowRepository {
 
     suspend fun addCategory(name: String): Long
 
+    suspend fun updateIncome(id: Long, title: String, amount: Long)
+
+    suspend fun updateExpense(id: Long, categoryId: Long, name: String, amount: Long, bankAccountId: Long)
+
     suspend fun deleteIncome(id: Long)
 
     suspend fun deleteExpense(id: Long)

@@ -137,6 +137,18 @@ class FlowRepositoryImpl @Inject constructor(
         return expenseCategoryDao.insert(ExpenseCategoryEntity(name = name))
     }
 
+    override suspend fun updateIncome(id: Long, title: String, amount: Long) {
+        cashIncomeDao.getById(id)?.let {
+            cashIncomeDao.update(it.copy(title = title, amount = amount))
+        }
+    }
+
+    override suspend fun updateExpense(id: Long, categoryId: Long, name: String, amount: Long, bankAccountId: Long) {
+        expenseDao.getById(id)?.let {
+            expenseDao.update(it.copy(categoryId = categoryId, name = name, amount = amount, bankAccountId = bankAccountId))
+        }
+    }
+
     override suspend fun deleteIncome(id: Long) {
         cashIncomeDao.getById(id)?.let {
             cashIncomeDao.delete(it)

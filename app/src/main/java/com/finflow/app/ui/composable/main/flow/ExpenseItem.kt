@@ -22,12 +22,13 @@ fun ExpenseItem(
     name: String,
     amount: Long,
     bankAccountName: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .clickable { /* TODO: Handle click */ }
+            .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
