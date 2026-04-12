@@ -26,6 +26,9 @@ class FlowViewModel @Inject constructor(
     private val _currentYearMonth = MutableStateFlow(YearMonth.now())
     val currentYearMonth: StateFlow<YearMonth> = _currentYearMonth.asStateFlow()
 
+    val availableMonths: StateFlow<Set<YearMonth>> = repository.getAvailableMonths()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptySet())
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val monthFlow: StateFlow<MonthFlow> = _currentYearMonth
         .flatMapLatest { ym ->
@@ -40,11 +43,36 @@ class FlowViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 
     fun moveToPreviousMonth() {
-        _currentYearMonth.value = _currentYearMonth.value.minusMonths(1)
+        val prev = _currentYearMonth.value.minusMonths(1)
+        if (availableMonths.value.contains(prev)) {
+            _currentYearMonth.value = prev
+        }
     }
 
     fun moveToNextMonth() {
-        _currentYearMonth.value = _currentYearMonth.value.plusMonths(1)
+        val next = _currentYearMonth.value.plusMonths(1)
+        if (availableMonths.value.contains(next)) {
+            _currentYearMonth.value = next
+        }
+    }
+
+    fun hasNextMonthData(): Boolean {
+        val next = _currentYearMonth.value.plusMonths(1)
+        return availableMonths.value.contains(next)
+    }
+
+    fun copyPreviousMonth() {
+        val current = _currentYearMonth.value
+        val next = current.plusMonths(1)
+        viewModelScope.launch {
+            repository.copyMonth(from = current, to = next)
+            _currentYearMonth.value = next
+        }
+    }
+
+    fun createEmptyMonth() {
+        val next = _currentYearMonth.value.plusMonths(1)
+        _currentYearMonth.value = next
     }
 
     fun addIncome(title: String, amount: Long) {

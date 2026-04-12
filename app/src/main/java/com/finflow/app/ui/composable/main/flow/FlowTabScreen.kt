@@ -9,9 +9,12 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -41,6 +44,7 @@ fun FlowTabScreen(
     val monthFlow by viewModel.monthFlow.collectAsState()
     val bankAccounts by viewModel.bankAccounts.collectAsState()
     val categories by viewModel.categories.collectAsState()
+    val availableMonths by viewModel.availableMonths.collectAsState()
 
     val incomeList = monthFlow.incomeList
     val generalExpenseList = monthFlow.expenseList
@@ -48,6 +52,9 @@ fun FlowTabScreen(
     val investmentExpenseList = monthFlow.investmentList
 
     val monthLabel = "${currentYearMonth.year}년 ${currentYearMonth.monthValue}월"
+
+    val hasPrevious = availableMonths.any { it < currentYearMonth }
+    val hasNext = availableMonths.any { it > currentYearMonth }
 
     // 추가 모드 상태
     var showTypeSelect by rememberSaveable { mutableStateOf(false) }
@@ -58,13 +65,22 @@ fun FlowTabScreen(
     var editingIncome by rememberSaveable { mutableStateOf<CashIncome?>(null) }
     var editingExpense by rememberSaveable { mutableStateOf<EditingExpense?>(null) }
 
+    // 다음 달 생성 다이얼로그
+    var showNewMonthDialog by rememberSaveable { mutableStateOf(false) }
+
     Box(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             MonthHeader(
                 currentMonth = monthLabel,
                 onPreviousMonth = viewModel::moveToPreviousMonth,
-                onNextMonth = viewModel::moveToNextMonth,
-                previousButtonEnabled = true,
+                onNextMonth = {
+                    if (hasNext) {
+                        viewModel.moveToNextMonth()
+                    } else {
+                        showNewMonthDialog = true
+                    }
+                },
+                previousButtonEnabled = hasPrevious,
                 nextButtonEnabled = true
             )
             LazyColumn(
@@ -142,6 +158,13 @@ fun FlowTabScreen(
                             bankAccounts = bankAccounts,
                             expenseList = generalExpenseList + savingExpenseList + investmentExpenseList
                         )
+                    }
+                }
+
+                val allExpenses: List<Expense> = generalExpenseList + savingExpenseList + investmentExpenseList
+                if (allExpenses.isNotEmpty()) {
+                    item {
+                        CategoryDonutChart(allExpenses = allExpenses)
                     }
                 }
             }
@@ -260,6 +283,35 @@ fun FlowTabScreen(
             onDelete = { id ->
                 viewModel.deleteExpense(id)
                 editingExpense = null
+            }
+        )
+    }
+
+    // === 다음 달 생성 다이얼로그 ===
+
+    if (showNewMonthDialog) {
+        val nextMonth = currentYearMonth.plusMonths(1)
+        val nextLabel = "${nextMonth.year}년 ${nextMonth.monthValue}월"
+
+        AlertDialog(
+            onDismissRequest = { showNewMonthDialog = false },
+            title = { Text(stringResource(R.string.new_month_dialog_title)) },
+            text = { Text(stringResource(R.string.new_month_dialog_message, nextLabel)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.copyPreviousMonth()
+                    showNewMonthDialog = false
+                }) {
+                    Text(stringResource(R.string.new_month_copy_previous))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    viewModel.createEmptyMonth()
+                    showNewMonthDialog = false
+                }) {
+                    Text(stringResource(R.string.new_month_create_new))
+                }
             }
         )
     }

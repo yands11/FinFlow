@@ -19,8 +19,8 @@ import com.finflow.app.ui.model.MonthStatUiModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import java.time.YearMonth
 import javax.inject.Inject
-import kotlin.collections.sorted
 
 class FlowRepositoryImpl @Inject constructor(
     private val cashIncomeDao: CashIncomeDao,
@@ -158,6 +158,29 @@ class FlowRepositoryImpl @Inject constructor(
     override suspend fun deleteExpense(id: Long) {
         expenseDao.getById(id)?.let {
             expenseDao.delete(it)
+        }
+    }
+
+    override fun getAvailableMonths(): Flow<Set<YearMonth>> {
+        val incomeKeys = cashIncomeDao.getAvailableMonthKeys()
+        val expenseKeys = expenseDao.getAvailableMonthKeys()
+
+        return combine(incomeKeys, expenseKeys) { ik, ek ->
+            (ik + ek).map { key ->
+                YearMonth.of(key / 100, key % 100)
+            }.toSet()
+        }
+    }
+
+    override suspend fun copyMonth(from: YearMonth, to: YearMonth) {
+        val incomes = cashIncomeDao.getByMonthOnce(from.year, from.monthValue)
+        incomes.forEach { entity ->
+            cashIncomeDao.insert(entity.copy(id = 0, year = to.year, month = to.monthValue))
+        }
+
+        val expenses = expenseDao.getByMonthOnce(from.year, from.monthValue)
+        expenses.forEach { entity ->
+            expenseDao.insert(entity.copy(id = 0, year = to.year, month = to.monthValue))
         }
     }
 }

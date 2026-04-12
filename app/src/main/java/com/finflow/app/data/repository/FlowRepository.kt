@@ -1,12 +1,11 @@
 package com.finflow.app.data.repository
 
-import com.finflow.app.domain.model.flow.CashIncome
 import com.finflow.app.domain.model.flow.MonthFlow
 import com.finflow.app.domain.model.flow.expense.BankAccount
-import com.finflow.app.domain.model.flow.expense.Expense
 import com.finflow.app.domain.model.flow.expense.ExpenseCategory
 import com.finflow.app.ui.model.MonthStatUiModel
 import kotlinx.coroutines.flow.Flow
+import java.time.YearMonth
 
 interface FlowRepository {
 
@@ -47,4 +46,8 @@ interface FlowRepository {
     suspend fun deleteIncome(id: Long)
 
     suspend fun deleteExpense(id: Long)
+
+    fun getAvailableMonths(): Flow<Set<YearMonth>>
+
+    suspend fun copyMonth(from: YearMonth, to: YearMonth)
 }

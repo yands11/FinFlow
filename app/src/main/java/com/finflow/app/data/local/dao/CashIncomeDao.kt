@@ -35,6 +35,12 @@ interface CashIncomeDao {
         """
     )
     fun getMonthlySummary(): Flow<List<MonthlyIncomeSummary>>
+
+    @Query("SELECT DISTINCT year * 100 + month AS monthKey FROM cash_income ORDER BY monthKey")
+    fun getAvailableMonthKeys(): Flow<List<Int>>
+
+    @Query("SELECT * FROM cash_income WHERE year = :year AND month = :month")
+    suspend fun getByMonthOnce(year: Int, month: Int): List<CashIncomeEntity>
 }
 
 data class MonthlyIncomeSummary(

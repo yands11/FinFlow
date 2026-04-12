@@ -49,6 +49,12 @@ interface ExpenseDao {
         """
     )
     fun getMonthlySummaryByType(): Flow<List<MonthlyExpenseSummary>>
+
+    @Query("SELECT DISTINCT year * 100 + month AS monthKey FROM expense ORDER BY monthKey")
+    fun getAvailableMonthKeys(): Flow<List<Int>>
+
+    @Query("SELECT * FROM expense WHERE year = :year AND month = :month")
+    suspend fun getByMonthOnce(year: Int, month: Int): List<ExpenseEntity>
 }
 
 data class MonthlyExpenseSummary(

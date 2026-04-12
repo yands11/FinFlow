@@ -46,4 +46,9 @@
     <string name="label_delete">삭제</string>
     <string name="delete_confirm_message">정말 삭제하시겠습니까?</string>
     <string name="label_confirm">확인</string>
+    <string name="new_month_dialog_title">다음 달 예산 추가</string>
+    <string name="new_month_dialog_message">%1$s 예산을 추가합니다.\n어떤 방식으로 시작할까요?</string>
+    <string name="new_month_copy_previous">이전 달 복사</string>
+    <string name="new_month_create_new">신규 작성</string>
+    <string name="category_expense_ratio_title">카테고리별 지출 비율</string>
 </resources>
