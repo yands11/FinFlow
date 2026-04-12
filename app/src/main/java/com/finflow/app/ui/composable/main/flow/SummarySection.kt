@@ -2,6 +2,7 @@ package com.finflow.app.ui.composable.main.flow
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
 import com.finflow.app.R
 import com.finflow.app.domain.model.flow.CashIncome
@@ -33,6 +35,8 @@ fun SummarySection(
     val expenseTotal = expenseList.sumOf { it.amount }
     val savingTotal = savingList.sumOf { it.amount }
     val investmentTotal = investmentList.sumOf { it.amount }
+
+    val remaining = incomeTotal - expenseTotal - savingTotal - investmentTotal
 
     Card(
         modifier = modifier.fillMaxWidth(),
@@ -63,6 +67,18 @@ fun SummarySection(
                 label = stringResource(id = R.string.investment_expense_title),
                 amount = investmentTotal
             )
+            if (remaining != 0L) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(vertical = 8.dp),
+                    color = MaterialTheme.colorScheme.outlineVariant
+                )
+                SummaryRow(
+                    label = stringResource(id = R.string.remaining_title),
+                    amount = remaining,
+                    amountColor = if (remaining > 0) MaterialTheme.colorScheme.primary
+                    else MaterialTheme.colorScheme.error
+                )
+            }
         }
     }
 }
@@ -70,7 +86,8 @@ fun SummarySection(
 @Composable
 private fun SummaryRow(
     label: String,
-    amount: Long
+    amount: Long,
+    amountColor: Color = MaterialTheme.colorScheme.onSurface,
 ) {
     Row(
         modifier = Modifier
@@ -89,7 +106,7 @@ private fun SummaryRow(
             text = "₩ ${DecimalFormat("#,###").format(amount)}",
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.onSurface
+            color = amountColor
         )
     }
 }

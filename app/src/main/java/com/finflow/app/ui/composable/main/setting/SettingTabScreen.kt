@@ -16,42 +16,81 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.finflow.app.R
+import com.finflow.app.ui.viewmodel.SettingViewModel
+
+private enum class SettingScreen {
+    MENU, ACCOUNTS, CATEGORIES
+}
 
 @Composable
 fun SettingTabScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: SettingViewModel = hiltViewModel(),
 ) {
-    Column(
-        modifier = modifier.fillMaxSize()
-    ) {
-        SettingMenuItem(
-            icon = Icons.Filled.AccountBalance,
-            title = stringResource(R.string.setting_account_management),
-            description = stringResource(R.string.setting_account_management_desc),
-            onClick = { /* TODO */ }
-        )
-        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+    var currentScreen by rememberSaveable { mutableStateOf(SettingScreen.MENU) }
 
-        SettingMenuItem(
-            icon = Icons.AutoMirrored.Filled.List,
-            title = stringResource(R.string.setting_category_management),
-            description = stringResource(R.string.setting_category_management_desc),
-            onClick = { /* TODO */ }
-        )
-        HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+    val accounts by viewModel.bankAccounts.collectAsState()
+    val categories by viewModel.categories.collectAsState()
 
-        SettingMenuItem(
-            icon = Icons.Filled.Info,
-            title = stringResource(R.string.setting_app_info),
-            description = stringResource(R.string.setting_app_version, "1.0.0"),
-            onClick = { /* TODO */ }
-        )
+    when (currentScreen) {
+        SettingScreen.MENU -> {
+            Column(modifier = modifier.fillMaxSize()) {
+                SettingMenuItem(
+                    icon = Icons.Filled.AccountBalance,
+                    title = stringResource(R.string.setting_account_management),
+                    description = stringResource(R.string.setting_account_management_desc),
+                    onClick = { currentScreen = SettingScreen.ACCOUNTS }
+                )
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+
+                SettingMenuItem(
+                    icon = Icons.AutoMirrored.Filled.List,
+                    title = stringResource(R.string.setting_category_management),
+                    description = stringResource(R.string.setting_category_management_desc),
+                    onClick = { currentScreen = SettingScreen.CATEGORIES }
+                )
+                HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+
+                SettingMenuItem(
+                    icon = Icons.Filled.Info,
+                    title = stringResource(R.string.setting_app_info),
+                    description = stringResource(R.string.setting_app_version, "1.0.0"),
+                    onClick = { }
+                )
+            }
+        }
+
+        SettingScreen.ACCOUNTS -> {
+            AccountManagementScreen(
+                accounts = accounts,
+                onBack = { currentScreen = SettingScreen.MENU },
+                onAdd = viewModel::addBankAccount,
+                onUpdate = viewModel::updateBankAccount,
+                onDelete = viewModel::deleteBankAccount,
+            )
+        }
+
+        SettingScreen.CATEGORIES -> {
+            CategoryManagementScreen(
+                categories = categories,
+                onBack = { currentScreen = SettingScreen.MENU },
+                onAdd = viewModel::addCategory,
+                onUpdate = viewModel::updateCategory,
+                onDelete = viewModel::deleteCategory,
+            )
+        }
     }
 }
 
@@ -72,8 +111,7 @@ private fun SettingMenuItem(
         Icon(
             imageVector = icon,
             contentDescription = title,
-            modifier = Modifier
-                .size(24.dp),
+            modifier = Modifier.size(24.dp),
             tint = MaterialTheme.colorScheme.primary
         )
         Column(

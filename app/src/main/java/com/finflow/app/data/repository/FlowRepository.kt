@@ -50,4 +50,12 @@ interface FlowRepository {
     fun getAvailableMonths(): Flow<Set<YearMonth>>
 
     suspend fun copyMonth(from: YearMonth, to: YearMonth)
+
+    suspend fun updateBankAccount(id: Long, name: String, bankName: String, accountNumber: String, ownerName: String)
+
+    suspend fun deleteBankAccount(id: Long)
+
+    suspend fun updateCategory(id: Long, name: String)
+
+    suspend fun deleteCategory(id: Long)
 }

@@ -183,6 +183,30 @@ class FlowRepositoryImpl @Inject constructor(
             expenseDao.insert(entity.copy(id = 0, year = to.year, month = to.monthValue))
         }
     }
+
+    override suspend fun updateBankAccount(id: Long, name: String, bankName: String, accountNumber: String, ownerName: String) {
+        bankAccountDao.getById(id)?.let {
+            bankAccountDao.update(it.copy(name = name, bankName = bankName, accountNumber = accountNumber, ownerName = ownerName))
+        }
+    }
+
+    override suspend fun deleteBankAccount(id: Long) {
+        bankAccountDao.getById(id)?.let {
+            bankAccountDao.delete(it)
+        }
+    }
+
+    override suspend fun updateCategory(id: Long, name: String) {
+        expenseCategoryDao.getById(id)?.let {
+            expenseCategoryDao.update(it.copy(name = name))
+        }
+    }
+
+    override suspend fun deleteCategory(id: Long) {
+        expenseCategoryDao.getById(id)?.let {
+            expenseCategoryDao.delete(it)
+        }
+    }
 }
 
 // Entity → Domain 매퍼

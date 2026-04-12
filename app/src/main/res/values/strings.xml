@@ -51,4 +51,5 @@
     <string name="new_month_copy_previous">이전 달 복사</string>
     <string name="new_month_create_new">신규 작성</string>
     <string name="category_expense_ratio_title">카테고리별 지출 비율</string>
+    <string name="remaining_title">잔여</string>
 </resources>
