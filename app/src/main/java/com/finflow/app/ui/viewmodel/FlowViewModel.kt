@@ -132,4 +132,18 @@ class FlowViewModel @Inject constructor(
             repository.deleteExpense(id)
         }
     }
+
+    fun deleteCurrentMonth() {
+        val ym = _currentYearMonth.value
+        val prev = ym.minusMonths(1)
+        viewModelScope.launch {
+            repository.deleteMonth(ym.year, ym.monthValue)
+            val remaining = availableMonths.value - ym
+            _currentYearMonth.value = when {
+                remaining.contains(prev) -> prev
+                remaining.isNotEmpty() -> remaining.max()
+                else -> YearMonth.now()
+            }
+        }
+    }
 }

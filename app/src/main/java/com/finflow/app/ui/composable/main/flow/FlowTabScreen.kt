@@ -69,6 +69,9 @@ fun FlowTabScreen(
     // 다음 달 생성 다이얼로그
     var showNewMonthDialog by rememberSaveable { mutableStateOf(false) }
 
+    // 이번 달 삭제 다이얼로그
+    var showDeleteMonthDialog by rememberSaveable { mutableStateOf(false) }
+
     Box(modifier = modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             MonthHeader(
@@ -82,7 +85,8 @@ fun FlowTabScreen(
                     }
                 },
                 previousButtonEnabled = hasPrevious,
-                nextButtonEnabled = true
+                nextButtonEnabled = true,
+                onLongPress = { showDeleteMonthDialog = true }
             )
             LazyColumn(
                 modifier = Modifier.weight(1f),
@@ -312,6 +316,32 @@ fun FlowTabScreen(
                     showNewMonthDialog = false
                 }) {
                     Text(stringResource(R.string.new_month_create_new))
+                }
+            }
+        )
+    }
+
+    // === 이번 달 삭제 다이얼로그 ===
+
+    if (showDeleteMonthDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteMonthDialog = false },
+            title = { Text(stringResource(R.string.delete_month_title)) },
+            text = { Text(stringResource(R.string.delete_month_message, monthLabel)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.deleteCurrentMonth()
+                    showDeleteMonthDialog = false
+                }) {
+                    Text(
+                        text = stringResource(R.string.label_delete),
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteMonthDialog = false }) {
+                    Text(stringResource(R.string.label_cancel))
                 }
             }
         )

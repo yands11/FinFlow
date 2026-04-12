@@ -41,6 +41,9 @@ interface CashIncomeDao {
 
     @Query("SELECT * FROM cash_income WHERE year = :year AND month = :month")
     suspend fun getByMonthOnce(year: Int, month: Int): List<CashIncomeEntity>
+
+    @Query("DELETE FROM cash_income WHERE year = :year AND month = :month")
+    suspend fun deleteByMonth(year: Int, month: Int)
 }
 
 data class MonthlyIncomeSummary(

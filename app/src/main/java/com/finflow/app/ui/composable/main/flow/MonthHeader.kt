@@ -1,6 +1,8 @@
 package com.finflow.app.ui.composable.main.flow
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -15,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -22,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.finflow.app.R
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MonthHeader(
     currentMonth: String,
@@ -29,7 +33,8 @@ fun MonthHeader(
     onNextMonth: () -> Unit,
     previousButtonEnabled: Boolean,
     nextButtonEnabled: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onLongPress: () -> Unit = {},
 ) {
     Box(
         modifier = modifier
@@ -59,7 +64,14 @@ fun MonthHeader(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.ExtraBold,
                 textAlign = TextAlign.Center,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier
+                    .weight(1f)
+                    .clip(CircleShape)
+                    .combinedClickable(
+                        onClick = {},
+                        onLongClick = onLongPress
+                    )
+                    .padding(vertical = 8.dp)
             )
             IconButton(
                 onClick = onNextMonth,

@@ -58,4 +58,6 @@ interface FlowRepository {
     suspend fun updateCategory(id: Long, name: String)
 
     suspend fun deleteCategory(id: Long)
+
+    suspend fun deleteMonth(year: Int, month: Int)
 }

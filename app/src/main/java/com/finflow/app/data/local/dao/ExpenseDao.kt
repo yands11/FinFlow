@@ -55,6 +55,9 @@ interface ExpenseDao {
 
     @Query("SELECT * FROM expense WHERE year = :year AND month = :month")
     suspend fun getByMonthOnce(year: Int, month: Int): List<ExpenseEntity>
+
+    @Query("DELETE FROM expense WHERE year = :year AND month = :month")
+    suspend fun deleteByMonth(year: Int, month: Int)
 }
 
 data class MonthlyExpenseSummary(

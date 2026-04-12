@@ -207,6 +207,11 @@ class FlowRepositoryImpl @Inject constructor(
             expenseCategoryDao.delete(it)
         }
     }
+
+    override suspend fun deleteMonth(year: Int, month: Int) {
+        cashIncomeDao.deleteByMonth(year, month)
+        expenseDao.deleteByMonth(year, month)
+    }
 }
 
 // Entity → Domain 매퍼
