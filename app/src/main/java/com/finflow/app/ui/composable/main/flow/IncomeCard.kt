@@ -15,12 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.finflow.app.R
 import java.text.DecimalFormat
 
 @Composable
@@ -28,22 +26,18 @@ fun IncomeCard(
     incomeAmount: Long,
     modifier: Modifier = Modifier
 ) {
+    val highlightColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.25f)
+
     Card(
         modifier = modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = colorResource(id = R.color.white)
+            containerColor = MaterialTheme.colorScheme.surfaceContainerLowest
         ),
-        shape = RoundedCornerShape(
-            topStart = 12.dp,
-            topEnd = 12.dp,
-            bottomStart = 12.dp,
-            bottomEnd = 12.dp
-        ),
+        shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.elevatedCardElevation(4.dp)
     ) {
-
         Column(
-            modifier = modifier
+            modifier = Modifier
                 .fillMaxWidth()
                 .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
         ) {
@@ -61,15 +55,15 @@ fun IncomeCard(
                                 colorStops = arrayOf(
                                     0.0f to Color.Transparent,
                                     0.7f to Color.Transparent,
-                                    0.7f to Color(0x442898D9),
-                                    1.0f to Color(0x442898D9),
+                                    0.7f to highlightColor,
+                                    1.0f to highlightColor,
                                 )
                             )
                         )
                 )
             }
             Row(
-                modifier = modifier
+                modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -78,14 +72,14 @@ fun IncomeCard(
                     text = "월급",
                     fontWeight = FontWeight.Bold,
                     style = MaterialTheme.typography.titleLarge,
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.onSurface,
                     modifier = Modifier.weight(1f),
                 )
 
                 Text(
                     text = "₩ ${DecimalFormat("#,###").format(incomeAmount)}",
                     style = MaterialTheme.typography.bodyLarge,
-                    color = Color(0xFF111111),
+                    color = MaterialTheme.colorScheme.onSurface,
                 )
             }
         }
