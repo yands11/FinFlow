@@ -38,6 +38,7 @@ google-services.json
 # Xcode user-specific files
 xcuserdata/
 *.xcuserstate
+.DS_Store
 
 # Xcode build intermediates
 *.xcscheme
