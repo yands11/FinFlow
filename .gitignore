@@ -31,3 +31,14 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+# Kotlin Native / KMP metadata cache
+.kotlin/
+
+# Xcode user-specific files
+xcuserdata/
+*.xcuserstate
+
+# Xcode build intermediates
+*.xcscheme
+DerivedData/
